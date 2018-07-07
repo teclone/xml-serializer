@@ -1,0 +1,69 @@
+{
+  "name": "xml-serializer",
+  "version": "1.0.0",
+  "description": "A javascript implementation of w3c xml-serialization spec",
+  "main": "index.js",
+  "scripts": {
+    "commit": "git-cz",
+    "test": "BABEL_ENV=test nyc mocha --recursive",
+    "test-watch": "BABEL_ENV=test nyc mocha --recursive -w",
+    "report-coverage": "nyc report --reporter=text-lcov | coveralls",
+    "prebuild": "rimraf dist",
+    "build": "BABEL_ENV=build rollup --config",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release",
+    "validate-doc": "documentation lint src/**/*.js",
+    "generate-doc": "rimraf docs/docs && documentation build src/**/*.js -f html -o docs/docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harrison-ifeanyichukwu/xml-serializer.git"
+  },
+  "keywords": [
+    "xml-serialization",
+    "xml-serializer",
+    "w3c-spec",
+    "jsdom-xml-serializer"
+  ],
+  "author": "Harrison Ifeanyichukwu <Harrisonifeanyichukwu@gmail.com> (http://fjsfoundations.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer/issues"
+  },
+  "homepage": "https://github.com/harrison-ifeanyichukwu/xml-serializer#readme",
+  "devDependencies": {
+    "babel-plugin-external-helpers": "6.22.0",
+    "babel-preset-env": "1.7.0",
+    "babel-register": "6.26.0",
+    "chai": "4.1.2",
+    "commitizen": "2.9.6",
+    "coveralls": "3.0.1",
+    "cz-conventional-changelog": "2.1.0",
+    "documentation": "8.0.0",
+    "istanbul": "0.4.5",
+    "jsdoc": "3.5.5",
+    "jsdom": "11.10.0",
+    "jshint": "2.9.5",
+    "mocha": "5.1.1",
+    "nyc": "11.8.0",
+    "rimraf": "2.6.2",
+    "rollup": "0.59.1",
+    "rollup-plugin-babel": "3.0.4",
+    "rollup-plugin-node-resolve": "3.3.0",
+    "rollup-plugin-uglify": "4.0.0",
+    "semantic-release": "^15.5.2",
+    "travis-deploy-once": "^5.0.0"
+  },
+  "czConfig": {
+    "path": "node_modules/cz-conventional-changelog"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-register",
+      "./test/setup.js"
+    ]
+  }
+}
