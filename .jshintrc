@@ -1,0 +1,17 @@
+{
+    "esversion": 6,
+    "undef": true,
+    "unused": true,
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "devel": true,
+    "expr": true,
+    "globals": {
+        "expect": true,
+        "server": true,
+        "chai": true,
+        "getInstance": true
+    },
+    "proto": true
+}
