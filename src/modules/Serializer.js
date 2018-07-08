@@ -78,6 +78,27 @@ export default class Serializser {
     }
 
     /**
+     * tests if the public id given is valid
+     *@param {string} pubId - the public id
+     *@returns {boolean}
+    */
+    validatePublicId(pubId) {
+        let pubIdChar = '[\\u0020]|[\\u000D]|[\\u000A]|[a-zA-Z0-9]|[\\-\\\'()+,./:=?;!*#@$_%]';
+
+        let regex = new RegExp(`^(${pubIdChar})*$`);
+        return typeof pubId === 'string' && regex.test(pubId);
+    }
+
+    /**
+     * tests if the systemId given is valid
+     *@param {string} systemId - the systemId
+     *@returns {boolean}
+    */
+    validateSystemId(systemId) {
+        return this.validateChar(systemId) && !(/[']/.test(systemId) && /["]/.test(systemId));
+    }
+
+    /**
      * checks if the given tuple consisting of namespaceURI and localName pair exists in the records
      *@param {Array} records - tuple records
      *@param {Array} tuple - the tuple to check
@@ -255,6 +276,49 @@ export default class Serializser {
 
         //STEP 4
         return result;
+    }
+
+    /**
+     * generate document type serialization
+     *@param {DocumentType} docType - the document type node
+     *@param {boolean} requireWellFormed - boolean value indicating if well formedness is a
+     * requirement
+     *@returns {string}
+     *@see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-doctype
+    */
+    serializeDocumentType(docType, requireWellFormed) {
+        //STEP 1
+        if (requireWellFormed && !this.validatePublicId(docType.publicId))
+            throw new Error(docType.publicId + ' contains invalid xml document pubId character value');
+
+        //STEP 2
+        if (requireWellFormed && !this.validateSystemId(docType.systemId))
+            throw new Error(docType.systemId + ' contains invalid xml document systemId character value');
+
+        //STEP 3, 4, 5
+        let markup = '<!DOCTYPE ';
+
+        if (docType.publicId === '' && docType.systemId === '' && /^html$/i.test(docType.name))
+            markup += docType.name.toLowerCase();
+        else
+            markup += docType.name;
+
+        //STEP 7
+        if (docType.publicId !== '')
+            markup += ` PUBLIC "${docType.publicId}"`;
+
+        //STEP 8
+        if (docType.systemId !== '' && docType.publicId === '')
+            markup += ` SYSTEM`;
+
+        //STEP 9
+        if (docType.systemId !== '')
+            markup += ` "${docType.systemId}"`;
+
+        //STEP 10
+        markup += '>';
+
+        return markup;
     }
 
     /**
