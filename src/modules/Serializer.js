@@ -258,6 +258,24 @@ export default class Serializser {
     }
 
     /**
+     * runs the XML serialization algorithm on a document fragment node
+     *@param {DocumentFragment} node - the document fragment node.
+     *@param {string} namespace - context namespace
+     *@param {Map} prefixMap - a namespace prefix map
+     *@param {boolean} requireWellFormed - a require well-formed flag
+     *@returns {string}
+     *@see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm
+    */
+    serializeDocumentFragment(node, namespace, prefixMap, requireWellFormed) {
+        let markup = '', childNodes = node.childNodes, len = childNodes.length, i = -1;
+
+        while (++i < len) {
+            markup += this.runSerialization(childNodes[i], namespace, prefixMap, requireWellFormed);
+        }
+        return markup;
+    }
+
+    /**
      * produces the XML serialization of a comment node
      *@param {Text} node - the text node
      *@param {boolean} requireWellFormed - a boolean require well-formed xml flag
