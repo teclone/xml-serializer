@@ -1,12 +1,19 @@
 import Serializer from './modules/Serializer.js';
 
-export default class {
+export default class XMLSerializer {
     /**
      *@param {boolean} [preserveWhiteSpace=true] - boolean value indicating if white spaces
      * should be preserved as it is in the source
     */
     constructor(preserveWhiteSpace) {
         this.serializer = new Serializer(preserveWhiteSpace);
+    }
+
+    /**
+     * return XMLSerializer as modules name
+    */
+    get [Symbol.toStringTag]() {
+        return 'XMLSerializer';
     }
 
     /**
