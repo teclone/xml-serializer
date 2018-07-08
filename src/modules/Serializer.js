@@ -248,6 +248,30 @@ export default class Serializser {
     }
 
     /**
+     * runs the XML serialization algorithm on a document node
+     *@param {Element} node - the element node.
+     *@param {string} namespace - context namespace
+     *@param {Map} prefixMap - a namespace prefix map
+     *@param {boolean} requireWellFormed - a require well-formed flag
+     *@returns {string}
+     *@see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm
+    */
+    serializeDocument(node, namespace, prefixMap, requireWellFormed) {
+        if(requireWellFormed && node.documentElement === null)
+            throw new Error('document has no document element root');
+
+        let serializeDocument = `<?xml version="1.0" encoding="${node.characterSet}"?>`;
+
+        let childNodes = node.childNodes, len = childNodes.length, i = -1;
+
+        while (++i < len) {
+            serializeDocument += this.runSerialization(childNodes[i], namespace,
+                prefixMap, requireWellFormed);
+        }
+        return serializeDocument;
+    }
+
+    /**
      * runs the XML serialization algorithm on an element node
      *@param {Element} node - the element node.
      *@param {string} namespace - context namespace
