@@ -18,6 +18,87 @@ export default class Serializser {
     }
 
     /**
+     * records the namespace information for an element
+     *@param {Element} elem - the element node
+     *@param {Map} prefixMap - element prefix to namespace map
+     *@param {Array} elmPrefixList - element current prefix list
+     *@returns {string}
+     *@see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-record-namespace-info
+    */
+    recordElementNSInfo(elem, prefixMap, elmPrefixList) {
+        //STEP 1
+        let defNSAttrValue = null, attributes = elem.attributes, i = -1,
+        len = attributes.length;
+
+        //STEP 2
+        while (++i < len) {
+            //STEP 2. 1, 2
+            let attr = attributes[i], attrNS = attr.namespaceURI, attrPrefix = attr.prefix;
+            //STEP 2.3
+            if (attrNS === XMLNS_NS) {
+                //STEP 2.3.1
+                if (attrPrefix === null) {
+                    defNSAttrValue = attr.value;
+                    continue;
+                }
+
+                // STEP 2.3.2
+                //STEP 2.3.2.1 & 2.3.2.2
+                let prefixDef = attr.localName, nsDef = attr.value;
+
+                //STEP 2.3.2.3
+                if (typeof prefixMap[nsDef] !== 'undefined' && prefixMap[nsDef] === prefixDef)
+                    this.dupPrefixDef.push(prefixDef);
+
+                //STEP 2.3.2.4 & 2.3.2.5 combined
+                else
+                    prefixMap[nsDef] = prefixDef;
+
+                //STEP 2.3.3.6
+                elmPrefixList.push(prefixDef);
+            }
+        }
+        return defNSAttrValue;
+    }
+
+    /**
+     * runs the XML serialization algorithm on an element node
+     *@param {Element} node - the element node.
+     *@param {string} namespace - context namespace
+     *@param {Map} prefixMap - a namespace prefix map
+     *@param {boolean} requireWellFormed - a require well-formed flag
+     *@returns {string}
+     *@see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm
+    */
+    serializeElement(node, namespace, prefixMap, requireWellFormed) {
+        let localName = node.localName; //get element local name
+
+        // STEP 1: if require well formed is true, and local name is not a valid xml tag name, throw error
+        /* istanbul ignore if */
+        if(requireWellFormed && !this.validateXMLTagName(localName))
+            throw new Error(localName + ' is not a valid xml element local name');
+
+        //STEP 2, 3, 4, 5, 6, 7
+        //declare markup, element qualified tag name, skip end tag boolean value, ignore
+        //namespace definition attribute, prefix map copy, element prefix list and
+        //duplicate prefix definition variables
+        let markup = '<', qualifiedName = '', skipEndTag = false, ignoreNSDefAttr = false,
+        map = Object.assign(Object.create(null), prefixMap), elmPrefixList = [];
+
+        //STEP 8
+        this.dupPrefixDef = [];
+
+        //STEP 9:
+        //get local definition namespace, update map copy and add any new element prefixes
+        let localDefNS = this.recordElementNSInfo(node, map, elmPrefixList, this.dupPrefixDef),
+
+        //STEP 10, 11
+        //delcare inherited namespace as parent namespace, and ns as node namespace uri
+        inheritedNS = namespace,
+        ns = node.namespaceURI;
+    }
+
+    /**
      * runs the XML serialization algorithm on depending on the node type
      *@param {Element} node - the element node.
      *@param {string} contextNamespace - context namespace
