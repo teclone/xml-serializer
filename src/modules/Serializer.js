@@ -68,6 +68,16 @@ export default class Serializser {
     }
 
     /**
+     * validates xml comment
+     *@param {string} comment - the xml comment
+     *@returns {boolean}
+    */
+    validateComment(comment) {
+        return this.validateChar(comment) && comment.indexOf('--') < 0 &&
+            comment.charAt(comment.length - 1) !== '-';
+    }
+
+    /**
      * checks if the given tuple consisting of namespaceURI and localName pair exists in the records
      *@param {Array} records - tuple records
      *@param {Array} tuple - the tuple to check
@@ -245,6 +255,19 @@ export default class Serializser {
 
         //STEP 4
         return result;
+    }
+
+    /**
+     * produces the XML serialization of a comment node
+     *@param {Comment} node - the comment node
+     *@param {boolean} requireWellFormed - a boolean require well-formed xml flag
+     *@returns {string}
+    */
+    serializeComment(node, requireWellFormed) {
+        if(requireWellFormed && !this.validateComment(node.data))
+            throw new Error(node.data + ' is not a valid xml comment data');
+
+        return '<!--' + node.data + '-->';
     }
 
     /**
