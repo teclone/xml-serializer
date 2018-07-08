@@ -27,7 +27,7 @@ export default {
      *@returns {boolean}
     */
     isAttributeNode(node) {
-        return node && (node.nodeType === 2 || toString.call(node) === '[object Attr]');
+        return node && (node.nodeType === 2 || Object.prototype.toString.call(node) === '[object Attr]');
     },
 
     /**
@@ -73,5 +73,5 @@ export default {
     */
     isDOMFragmentNode(node) {
         return node && node.nodeType === 11;
-    }
+    },
 };
