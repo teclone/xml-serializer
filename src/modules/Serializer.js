@@ -99,6 +99,24 @@ export default class Serializser {
     }
 
     /**
+     * validates xml processing instruction target value
+     *@param {string} target - the target text
+     *@returns {boolean}
+    */
+    validatePITarget(target) {
+        return this.validateChar(target) && target.indexOf(':') < 0 && target.toLowerCase() !== 'xml';
+    }
+
+    /**
+     * validates xml processing instruction data value
+     *@param {string} data - the data value
+     *@returns {boolean}
+    */
+    validatePIData(data) {
+        return this.validateChar(data) && data.indexOf('?>') < 0;
+    }
+
+    /**
      * checks if the given tuple consisting of namespaceURI and localName pair exists in the records
      *@param {Array} records - tuple records
      *@param {Array} tuple - the tuple to check
@@ -276,6 +294,29 @@ export default class Serializser {
 
         //STEP 4
         return result;
+    }
+
+    /**
+     * serializes processing instruction node
+     *@param {ProcessingInstruction} node - the processing instruction node
+     *@param {boolean} requireWellFormed - boolean value indicating if well formedness is a
+     * requirement
+     *@returns {string}
+    */
+    serializeProcessingInstruction(node, requireWellFormed) {
+        //STEP 1
+        if (requireWellFormed && !this.validatePITarget(node.target))
+            throw new Error(node.target + ' is not a valid processing instruction target value');
+
+        //STEP 2
+        if (requireWellFormed && !this.validatePIData(node.data))
+            throw new Error(node.data + ' contains invalid processing instruction character values');
+
+        //STEP 4
+        let markup = `<?${node.target} ${node.data}?>`;
+
+        //STEP 4
+        return markup;
     }
 
     /**
