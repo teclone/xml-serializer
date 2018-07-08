@@ -259,6 +259,20 @@ export default class Serializser {
 
     /**
      * produces the XML serialization of a comment node
+     *@param {Text} node - the text node
+     *@param {boolean} requireWellFormed - a boolean require well-formed xml flag
+     *@returns {string}
+    */
+    serializeText(node, requireWellFormed) {
+        if(requireWellFormed && !this.validateChar(node.data))
+            throw new Error(node.data + ' is not a valid xml text data');
+
+        let data = this.preserveWhiteSpace? node.data : node.data.trim();
+        return data.replace(/\&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    /**
+     * produces the XML serialization of a comment node
      *@param {Comment} node - the comment node
      *@param {boolean} requireWellFormed - a boolean require well-formed xml flag
      *@returns {string}
