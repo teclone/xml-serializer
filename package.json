@@ -1,8 +1,8 @@
 {
   "name": "xml-serializer",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "A javascript implementation of w3c xml-serialization spec",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "commit": "git-cz",
     "test": "BABEL_ENV=test nyc mocha --recursive",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harrison-ifeanyichukwu/xml-serializer.git"
+    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer.git"
   },
   "keywords": [
     "xml-serialization",
@@ -51,8 +51,8 @@
     "rollup-plugin-babel": "3.0.4",
     "rollup-plugin-node-resolve": "3.3.0",
     "rollup-plugin-uglify": "4.0.0",
-    "semantic-release": "^15.5.2",
-    "travis-deploy-once": "^5.0.0"
+    "semantic-release": "^15.6.3",
+    "travis-deploy-once": "^5.0.1"
   },
   "czConfig": {
     "path": "node_modules/cz-conventional-changelog"
