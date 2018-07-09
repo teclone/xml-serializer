@@ -1,5 +1,5 @@
 {
-  "name": "xml-serializer",
+  "name": "w3c-xml-serializer",
   "version": "0.0.0-development",
   "description": "A javascript implementation of w3c xml-serialization spec",
   "main": "main.js",
@@ -17,20 +17,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer.git"
+    "url": "https://github.com/harrison-ifeanyichukwu/w3c-xml-serializer.git"
   },
   "keywords": [
     "xml-serialization",
     "xml-serializer",
+    "rss",
     "w3c-spec",
     "jsdom-xml-serializer"
   ],
-  "author": "Harrison Ifeanyichukwu <Harrisonifeanyichukwu@gmail.com> (http://fjsfoundations.com/)",
+  "author": "Harrison Ifeanyichukwu <Harrisonifeanyichukwu@gmail.com> (https://harrison-ifeanyichukwu.github.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer/issues"
+    "url": "https://github.com/harrison-ifeanyichukwu/w3c-xml-serializer/issues"
   },
-  "homepage": "https://github.com/harrison-ifeanyichukwu/xml-serializer#readme",
+  "homepage": "https://github.com/harrison-ifeanyichukwu/w3c-xml-serializer#readme",
   "devDependencies": {
     "babel-plugin-external-helpers": "6.22.0",
     "babel-preset-env": "1.7.0",
