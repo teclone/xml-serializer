@@ -5,15 +5,17 @@ cache:
 notifications:
   email: false
 node_js:
-  - '9'
-  - '8'
+  - "10"
+  - "9"
+  - "8"
 script:
   - npm run test
-# - npm run check-coverage ##check code coverage
-  - npm run build
-after_success:
-  - npm run report-coverage
-  - npm run travis-deploy-once "npm run semantic-release"
-branches:
-  except:
-    - /^v\d+\.\d+\.\d+$/
+jobs:
+  include:
+    - stage: release
+      node_js: "10"
+      script:
+        - npm run build
+      after_success:
+        - npm run report-coverage
+        - npm run semantic-release
