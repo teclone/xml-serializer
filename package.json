@@ -1,5 +1,5 @@
 {
-  "name": "w3c-xml-serializer",
+  "name": "@harrison-ifeanyichukwu/xml-serializer",
   "version": "0.0.0-development",
   "description": "A javascript implementation of w3c xml-serialization spec",
   "main": "main.js",
