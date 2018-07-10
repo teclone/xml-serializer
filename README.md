@@ -1,30 +1,246 @@
-# W3C-XML-Serializer
+# XML-Serializer
 
-[![Build Status](https://travis-ci.org/harrison-ifeanyichukwu/w3c-xml-serializer.svg?branch=master)](https://travis-ci.org/harrison-ifeanyichukwu/w3c-xml-serializer)
-[![Coverage Status](https://coveralls.io/repos/github/harrison-ifeanyichukwu/w3c-xml-serializer/badge.svg?branch=master)](https://coveralls.io/github/harrison-ifeanyichukwu/w3c-xml-serializer?branch=master)
+[![Build Status](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer.svg?branch=master)](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer)
+[![Coverage Status](https://coveralls.io/repos/github/harrison-ifeanyichukwu/xml-serializer/badge.svg?branch=master)](https://coveralls.io/github/harrison-ifeanyichukwu/xml-serializer?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-`W3C-XML-Serializer` is A JavaScript implementation of w3c [xml serialization](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml) spec. All specifications have been implemented and includes the following [specs](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm):
+XML-Serializer is A JavaScript complete implementation of the W3C [xml serialization](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml) spec. All specifications have been implemented and includes the following [specs](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm):
 
-- [Element node Serialization]
+- [ELEMENT_NODE Serialization]
 
-- [Document node Serialization]
+- [DOCUMENT_NODE Serialization]
 
-- [Comment node Serialization]
+- [COMMENT_NODE Serialization]
 
-- [Text node Serialization]
+- [TEXT_NODE Serialization]
 
-- [Document Fragment node Serialization]
+- [DOCUMENT_FRAGMENT_NODE Serialization]
 
-- [Document Type Serialization]
+- [DOCUMENT_TYPE_NODE Serialization]
 
-- [Processing Instruction Serialization]
+- [PROCESSING_INSTRUCTION_NODE Serialization]
 
 ## Module Availability
 
-This module is available as an npm package and also as a browser module. It can easily integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
+This module is available as an [npm](https://www.npmjs.com/) scoped package and also has a browser build that is located inside the `dist` folder. It can easily be integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
 
-## Useful Articles
+## Installing the Package
+
+The below command will install `xml-serializer` from npm into your project assuming you have the [npm](https://www.npmjs.com/) already installed.
+
+> NB: Because of some conflicting package names that already exists on npm, this one has been turned into a scoped package with public access.
+
+**Install as a development dependency**:
+
+```bash
+npm install --save-dev @harrison-ifeanyichukwu/xml-serializer
+```
+
+**Install as a production dependency**:
+
+```bash
+npm install --save @harrison-ifeanyichukwu/xml-serializer
+```
+
+## Usage Guide
+
+following the specification, the `XMLSerializer` interface is a constructor and has a `serializeToString(root)` method exposed on the instance. To serialize any xml node, call the `serializeToString(root)` method on a constructed instance, passing in the xml node as below
+
+```javascript
+import XMLSerializer from '@harrison-ifeanyichukwu/xml-serializer';
+
+let instance = new XMLSerializer();
+console.log(instance.serializeToString(someXmlNode));
+```
+
+### Using with [JSDOM](https://github.com/jsdom/jsdom)
+
+Currently, JSDOM has not implemented the `XMLSerializer` feature. This can be easily integrated with JSDOM and any other similar mockup environment like below.
+
+```javascript
+//assumes jsdom has been installed.
+import XMLSerializer from '@harrison-ifeanyichukwu/xml-serializer';
+import {JSDOM} from 'jsdom';
+
+let dom = new JSDOM();
+
+dom.window.XMLSerializer = XMLSerializer;
+
+global.window = dom.window;
+
+//start running your tests or do something else.
+```
+
+### Using on the browser
+
+The browser build is available inside the dist folder. It exposes the `XMLSerialzer` construct on the `window` object.
+
+## New Features & Improvements
+
+By default, the serializer preserves white space during the serialization process. This can be turned off by passing in false to the constructor at the time of creating an instance.
+
+```javascript
+let instance = new XMLSerializer(false) // preserveWhiteSpace is set to false. it wont
+//preserve white spaces
+```
+
+Another improvement is that it removes all duplicate prefix definition on any xml element which is part of the specification unlike what web browsers do. Below is an example of this
+
+**Original XML**:
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<?xml-stylesheet href="classic.css" alternate="yes" title="Classic"
+ media="screen, print" type="text/css"?>
+
+<!--notice that two namespaces have been defined on the root element-->
+<root xmlns:h="http://www.w3.org/TR/html4/" xmlns:f="https://www.w3schools.com/furniture">
+
+    <!--notice that it is declared again here. this is a duplicate-->
+    <h:table xmlns:h="http://www.w3.org/TR/html4/" xmlns:f="https://www.w3schools.com/furniture">
+        <h:tr>
+            <h:td>
+            <h:td>Apples</h:td>
+            <h:td>Bananas</h:td>
+        </h:tr>
+    </h:table>
+
+    <!--one is duplicated here-->
+    <f:table xmlns:f="https://www.w3schools.com/furniture">
+        <f:name>African Coffee Table</f:name>
+        <f:width>80</f:width>
+        <f:length>120</f:length>
+    </f:table>
+
+    <!--html section-->
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta name="description" content="this is html section" />
+            <base href="http://localhost" />
+        </head>
+        <body>
+            <p>this is a paragraph text</p>
+            <hr />
+            <template>
+                <p>this is a template</p>
+            </template>
+        </body>
+    </html>
+
+    <svg:svg xmlns:svg="http://www.w3.org/2000/svg">
+        <svg:style></svg:style>
+        <title>my title<title>
+    </svg:svg>
+
+</root>
+```
+
+**Chrome inbuilt XMLSerializer Output:**
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<?xml-stylesheet href="classic.css" alternate="yes" title="Classic"
+ media="screen, print" type="text/css"?>
+
+<!--notice that two namespaces have been defined on the root element-->
+<root xmlns:h="http://www.w3.org/TR/html4/" xmlns:f="https://www.w3schools.com/furniture">
+
+    <!--notice that it is declared again here. this is a duplicate-->
+    <h:table xmlns:h="http://www.w3.org/TR/html4/" xmlns:f="https://www.w3schools.com/furniture">
+        <h:tr>
+            <h:td>
+            <h:td>Apples</h:td>
+            <h:td>Bananas</h:td>
+        </h:tr>
+    </h:table>
+
+    <!--one is duplicated here-->
+    <f:table xmlns:f="https://www.w3schools.com/furniture">
+        <f:name>African Coffee Table</f:name>
+        <f:width>80</f:width>
+        <f:length>120</f:length>
+    </f:table>
+
+    <!--html section-->
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta name="description" content="this is html section" />
+            <base href="http://localhost" />
+        </head>
+        <body>
+            <p>this is a paragraph text</p>
+            <hr />
+            <template>
+                <p>this is a template</p>
+            </template>
+        </body>
+    </html>
+
+    <svg:svg xmlns:svg="http://www.w3.org/2000/svg">
+        <svg:style></svg:style>
+        <title>my title<title>
+    </svg:svg>
+
+</root>
+```
+
+**Output of this module: removes the duplicate namspace declarations:**
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<?xml-stylesheet href="classic.css" alternate="yes" title="Classic"
+ media="screen, print" type="text/css"?>
+
+<!--notice that two namespaces have been defined on the root element-->
+<root xmlns:h="http://www.w3.org/TR/html4/" xmlns:f="https://www.w3schools.com/furniture">
+
+    <!--notice that it is declared again here. this is a duplicate-->
+    <h:table>
+        <h:tr>
+            <h:td>
+            <h:td>Apples</h:td>
+            <h:td>Bananas</h:td>
+        </h:tr>
+    </h:table>
+
+    <!--one is duplicated here-->
+    <f:table>
+        <f:name>African Coffee Table</f:name>
+        <f:width>80</f:width>
+        <f:length>120</f:length>
+    </f:table>
+
+    <!--html section-->
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta name="description" content="this is html section" />
+            <base href="http://localhost" />
+        </head>
+        <body>
+            <p>this is a paragraph text</p>
+            <hr />
+            <template>
+                <p>this is a template</p>
+            </template>
+        </body>
+    </html>
+
+    <svg:svg xmlns:svg="http://www.w3.org/2000/svg">
+        <svg:style></svg:style>
+        <title>my title<title>
+    </svg:svg>
+
+</root>
+```
+
+## Acknowledgments
 
 In addition to the spec, the following sections as well as outside resources were consulted and proved very useful:
 
