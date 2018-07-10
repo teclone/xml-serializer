@@ -1,4 +1,4 @@
-import XMLSerializer from '../src/exports.js';
+import XMLSerializer from '../src/main.js';
 
 describe('Module export', function() {
     describe('constructor(preserveWhiteSpace=true)', function() {
