@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer.svg?branch=master)](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer)
 [![Coverage Status](https://coveralls.io/repos/github/harrison-ifeanyichukwu/xml-serializer/badge.svg?branch=master)](https://coveralls.io/github/harrison-ifeanyichukwu/xml-serializer?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+![npm (scoped)](https://img.shields.io/npm/v/@harrison-ifeanyichukwu/xml-serializer.svg)
 
 XML-Serializer is A JavaScript complete implementation of the W3C [xml serialization](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml) spec. All specifications have been implemented and includes the following [specs](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm):
 
