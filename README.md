@@ -1,11 +1,11 @@
-# XML-Serializer
+# R-Serializer
 
-[![Build Status](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer.svg?branch=master)](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer)
-[![Coverage Status](https://coveralls.io/repos/github/harrison-ifeanyichukwu/xml-serializer/badge.svg?branch=master)](https://coveralls.io/github/harrison-ifeanyichukwu/xml-serializer?branch=master)
+[![Build Status](https://travis-ci.org/harrison-ifeanyichukwu/r-serializer.svg?branch=master)](https://travis-ci.org/harrison-ifeanyichukwu/r-serializer)
+[![Coverage Status](https://coveralls.io/repos/github/harrison-ifeanyichukwu/r-serializer/badge.svg?branch=master)](https://coveralls.io/github/harrison-ifeanyichukwu/r-serializer?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![npm version](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fxml-serializer.svg)](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fxml-serializer)
+[![npm version](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fr-serializer.svg)](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fr-serializer)
 
-XML-Serializer is A JavaScript complete implementation of the W3C [xml serialization](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml) spec. All specifications have been implemented and includes the following [specs](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm):
+R-Serializer is a complete JavaScript implementation of the W3C [xml serialization](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml) specifications. All specifications have been implemented and includes the following [specs](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm):
 
 - [ELEMENT_NODE Serialization]
 
@@ -23,24 +23,16 @@ XML-Serializer is A JavaScript complete implementation of the W3C [xml serializa
 
 ## Module Availability
 
-This module is available as an [npm](https://www.npmjs.com/) scoped package and also has a browser build that is located inside the `dist` folder. It can easily be integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
+This module is available as an [npm](https://www.npmjs.com/) package and also has a browser build that is located inside the `dist` folder. It can easily be integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
 
-## Installing the Package
+## Getting Started
 
-The below command will install `xml-serializer` from npm into your project assuming you have the [npm](https://www.npmjs.com/) already installed.
-
-> NB: Because of some conflicting package names that already exists on npm, this one has been turned into a scoped package with public access.
+The below command will install `r-serializer` from npm into your project assuming you have the [npm](https://www.npmjs.com/) already installed.
 
 **Install as a development dependency**:
 
 ```bash
-npm install --save-dev @harrison-ifeanyichukwu/xml-serializer
-```
-
-**Install as a production dependency**:
-
-```bash
-npm install --save @harrison-ifeanyichukwu/xml-serializer
+npm install --save-dev r-serializer
 ```
 
 ## Usage Guide
@@ -48,7 +40,7 @@ npm install --save @harrison-ifeanyichukwu/xml-serializer
 following the specification, the `XMLSerializer` interface is a constructor and has a `serializeToString(root)` method exposed on the instance. To serialize any xml node, call the `serializeToString(root)` method on a constructed instance, passing in the xml node as below
 
 ```javascript
-import XMLSerializer from '@harrison-ifeanyichukwu/xml-serializer';
+import XMLSerializer from 'r-serializer';
 
 let instance = new XMLSerializer();
 console.log(instance.serializeToString(someXmlNode));
@@ -56,11 +48,11 @@ console.log(instance.serializeToString(someXmlNode));
 
 ### Using with [JSDOM](https://github.com/jsdom/jsdom)
 
-Currently, JSDOM has not implemented the `XMLSerializer` feature. This can be easily integrated with JSDOM and any other similar mockup environment like below.
+Currently, JSDOM has not implemented the `XMLSerializer` interface. This can be easily integrated with JSDOM and any other similar mockup environment or for web scrapping and xml feed parsing like below.
 
 ```javascript
 //assumes jsdom has been installed.
-import XMLSerializer from '@harrison-ifeanyichukwu/xml-serializer';
+import XMLSerializer from 'r-serializer';
 import {JSDOM} from 'jsdom';
 
 let dom = new JSDOM();
@@ -85,7 +77,8 @@ let instance = new XMLSerializer(false) // preserveWhiteSpace is set to false. i
 //preserve white spaces
 ```
 
-Another improvement is that it removes all duplicate prefix definition on any xml element which is part of the specification unlike what web browsers do. Below is an example of this
+Another improvement is that it removes all duplicate prefix definition on any xml element as recommended in the specification document unlike what web browsers do. Below is an example of
+this:
 
 **Original XML**:
 
@@ -141,6 +134,8 @@ Another improvement is that it removes all duplicate prefix definition on any xm
 
 **Chrome inbuilt XMLSerializer Output:**
 
+Notice that all of the duplicated namespaces are removed.
+
 ```xml
 <?xml version="1.0" encoding="utf-8" ?><!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -190,7 +185,9 @@ Another improvement is that it removes all duplicate prefix definition on any xm
 </root>
 ```
 
-**Output of this module: removes the duplicate namspace declarations:**
+**Output of this module:**
+
+Notice that all of the duplicated namespaces are removed.
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?><!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

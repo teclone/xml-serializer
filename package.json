@@ -1,7 +1,7 @@
 {
-  "name": "@harrison-ifeanyichukwu/xml-serializer",
+  "name": "r-serializer",
   "version": "0.0.0-development",
-  "description": "A javascript implementation of w3c xml-serialization spec",
+  "description": "R-Serializer is a complete JavaScript implementation of the W3C xml serialization specifications",
   "main": "lib/main.js",
   "publishConfig": {
     "access": "public"
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer.git"
+    "url": "https://github.com/harrison-ifeanyichukwu/r-serializer.git"
   },
   "keywords": [
     "xml-serialization",
@@ -32,9 +32,9 @@
   "author": "Harrison Ifeanyichukwu <Harrisonifeanyichukwu@gmail.com> (https://harrison-ifeanyichukwu.github.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer/issues"
+    "url": "https://github.com/harrison-ifeanyichukwu/r-serializer/issues"
   },
-  "homepage": "https://github.com/harrison-ifeanyichukwu/xml-serializer#readme",
+  "homepage": "https://github.com/harrison-ifeanyichukwu/r-serializer#readme",
   "devDependencies": {
     "babel-plugin-external-helpers": "6.22.0",
     "babel-preset-env": "1.7.0",
