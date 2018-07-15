@@ -312,8 +312,10 @@ export default class Serializser {
         if (requireWellFormed && !this.validatePIData(node.data))
             throw new Error(node.data + ' contains invalid processing instruction character values');
 
+        let target = this.preserveWhiteSpace? node.target : node.target.trim(),
+        data = this.preserveWhiteSpace? node.data : node.data.trim();
         //STEP 4
-        let markup = `<?${node.target} ${node.data}?>`;
+        let markup = `<?${target} ${data}?>`;
 
         //STEP 4
         return markup;
@@ -337,24 +339,26 @@ export default class Serializser {
             throw new Error(docType.systemId + ' contains invalid xml document systemId character value');
 
         //STEP 3, 4, 5
-        let markup = '<!DOCTYPE ';
+        let markup = '<!DOCTYPE ',
+        publicId = this.preserveWhiteSpace? docType.publicId : docType.publicId.trim(),
+        systemId = this.preserveWhiteSpace? docType.systemId : docType.systemId.trim();
 
-        if (docType.publicId === '' && docType.systemId === '' && /^html$/i.test(docType.name))
+        if (publicId === '' && systemId === '' && /^html$/i.test(docType.name))
             markup += docType.name.toLowerCase();
         else
             markup += docType.name;
 
         //STEP 7
-        if (docType.publicId !== '')
-            markup += ` PUBLIC "${docType.publicId}"`;
+        if (publicId !== '')
+            markup += ` PUBLIC "${publicId}"`;
 
         //STEP 8
-        if (docType.systemId !== '' && docType.publicId === '')
+        if (systemId !== '' && publicId === '')
             markup += ` SYSTEM`;
 
         //STEP 9
-        if (docType.systemId !== '')
-            markup += ` "${docType.systemId}"`;
+        if (systemId !== '')
+            markup += ` "${systemId}"`;
 
         //STEP 10
         markup += '>';
