@@ -6,6 +6,6 @@
         "uglify": true
     },
     "libConfig": {
-
+        "uglify": false
     }
 }

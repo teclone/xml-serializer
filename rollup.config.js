@@ -6,39 +6,18 @@ import babel from 'rollup-plugin-babel';
 import {uglify} from 'rollup-plugin-uglify';
 
 /**
- * returns the config for the given file
- *@param {boolean} _uglify - boolean value indicating if file should be minified
- *@param {string} format - the expected output format
- *@param {string} src - the file source directory
- *@param {string} dest - the file destination directory, omit the .js extension
- *@param {string} name - the file module name
- *@param {Array} externals - array of module externals
- *@returns {Object}
+ *@description - converts the letters into camel like cases
+ *@param {string} value - the string word to convert
+ *@param {string|RegExp} [delimiter=/[-_]/] - a delimiter string or regex pattern used in
+ * finding split segments
+ *@returns {string}
 */
-function getConfig(_uglify, format, src, dest, name, externals) {
-    let plugins = [
-        resolve(),
-        babel({
-            exclude: 'node_modules/**',
-            plugins: ["external-helpers"]
-        })
-    ];
-
-    if (_uglify)
-        plugins.push(uglify());
-
-    return {
-        input: src,
-        output: {
-            file: dest + (_uglify? '.min.js' : '.js'),
-            format: format,
-            name: name,
-            interop: false,
-            //sourcemap: true
-        },
-        plugins: plugins,
-        external: externals || []
-    };
+function camelCase(value, delimiter = /[-_]/) {
+    value = value.toString();
+    let tokens = value.split(delimiter).map((token, idx) => {
+        return idx === 0? token : token[0].toUpperCase() + token.substring(1);
+    });
+    return tokens.join('');
 }
 
 /**
@@ -51,7 +30,7 @@ function resolveRegex(patterns) {
 
     if (Object.prototype.toString.call(patterns) === '[object Array]') {
         return patterns.map((pattern) => {
-            pattern = pattern.replace(/\./g, '\.').replace(/\*{2}/g, '.*').replace(/\*/g, '[^/]+');
+            pattern = pattern.replace(/\./g, '\\.').replace(/\*{2}/g, '.*').replace(/\*/g, '[^/]+');
             return new RegExp(pattern, 'i');
         });
     }
@@ -60,41 +39,55 @@ function resolveRegex(patterns) {
 }
 
 /**
- * gets all modules
- *@param {string} dir - the root module directory to iterate
- *@param {string} mainModuleName - the global module name for the main export file.
- * others are mapped to file names
- *@returns {Array}
+ * returns the config for the given file
+ *@param {boolean} _uglify - boolean value indicating if file should be minified
+ *@param {Object} options - object options
+ *@param {string} options.format - the expected output format
+ *@param {string} options.src - the file source directory
+ *@param {string} options.dest - the file destination directory, omit the .js extension
+ *@param {string} name - the file module name
+ *@param {Array} externals - array of module externals
+ *@returns {Object}
 */
-function getModules(dir, mainModuleName) {
-    let modules = [];
-    fs.readdirSync(path.resolve(__dirname, dir)).forEach(file => {
-        let filePath = path.resolve(__dirname, dir) + '/' + file;
-        if (fs.statSync(filePath).isFile()) {
-            let name = path.basename(filePath, '.js');
-            if(name === 'main')
-                name = mainModuleName;
+function getConfig(_uglify, options, name, externals) {
+    let plugins = [
+        resolve(),
+        babel({
+            exclude: 'node_modules/**',
+            plugins: ['external-helpers']
+        })
+    ];
 
-            modules.push({name: name, path: filePath});
-        }
-        else {
-            modules.push(...getModules(filePath));
-        }
-    });
-    return modules;
+    if (_uglify)
+        plugins.push(uglify());
+
+    return {
+        input: options.src,
+        output: {
+            file: options.dest + (_uglify? '.min' : '') + options.ext,
+            format: options.format,
+            name: camelCase(name),
+            interop: false,
+            //sourcemap: true
+        },
+        plugins: plugins,
+        external: externals
+    };
 }
 
 /**
  * returns the allowed exports for each build kind
- *@param {string} outDir - the out directory for the build kind
- *@param {string} format - the output format for all included modules in this build kind
+ *@param {Object} options - options object
+ *@param {string} options.outDir - the out directory for the build kind
+ *@param {string} options.format - the output format for all included modules in this build
+ *@param {boolean} options.uglify - boolean value indicating if modules should be uglified
+ *@param {boolean} options.uglifyOnly - boolean value indicating if only uglified outputs should
+ * be produced
  *@param {Array} modules - the modules list to build from
  *@param {Array} externalModules - array of external modules
- *@returns {Array}
 */
-function getExports(outDir, format, uglify, modules, externalModules, includes, excludes) {
-    let exports = [],
-    src = null,
+function getExports(exports, options, modules, externalModules, includes, excludes) {
+    let src = null,
     regexMatches = function(regex) {
         return regex.test(src);
     },
@@ -103,55 +96,154 @@ function getExports(outDir, format, uglify, modules, externalModules, includes, 
     };
 
     for (let _module of modules) {
-        src = _module.path;
-        if (includes.some(regexMatches) && !excludes.some(regexMatches)) {
-            let dest = outDir + '/' + src.replace(/^.*\/src\//, '').replace(/\.js$/, ''),
-            externals = externalModules.filter(filterExternalModules);
+        src = _module.absPath + _module.ext;
+        if (!includes.some(regexMatches) || excludes.some(regexMatches))
+            continue;
 
-            exports.push(getConfig(false, format, src, dest, _module.name, externals));
-            if (uglify)
-                exports.push(getConfig(true, format, src, dest, _module.name, externals));
+        let dest = options.outDir + '/' + _module.relPath;
+        if (_module.isAsset) {
+            if (options.copyAssets) {
+                const dir = path.dirname(dest);
+                if (!fs.existsSync(dir))
+                    fs.mkdirSync(dir);
+
+                fs.writeFileSync(dest, fs.readFileSync(src));
+            }
+            continue;
         }
-    }
 
-    return exports;
+        let externals = externalModules.filter(filterExternalModules);
+        if(!options.uglifyOnly)
+            exports.push(getConfig(false, {
+                src: src,
+                dest: dest,
+                format:options.format,
+                ext: _module.ext
+            }, _module.name, externals));
+
+        if (options.uglifyOnly || options.uglify)
+            exports.push(getConfig(true, {
+                src: src,
+                dest: dest,
+                format:options.format,
+                ext: _module.ext
+            }, _module.name, externals));
+    }
 }
 
+/**
+ * gets all modules
+ *@param {Array} modules - array to store modules
+ *@param {string} dir - the root module directory to iterate
+ *@param {string} mainModuleName - the global module name for the main export file.
+ * others are mapped to file names
+ *@returns {Array}
+*/
+function getModules(modules, resolvedPath, mainModuleName, srcPaths, fileExtensions) {
+    let files = fs.readdirSync(resolvedPath);
+    for (let file of files) {
+        let filePath = resolvedPath + '/' + file;
+        if (!fs.statSync(filePath).isFile()) {
+            getModules(modules, filePath, mainModuleName, [...srcPaths, file], fileExtensions);
+            continue;
+        }
+
+        let baseName = '', extname = path.extname(file);
+        for (const fileExtension of fileExtensions) {
+            if (fileExtension === extname) {
+                baseName = path.basename(file, fileExtension);
+                break;
+            }
+        }
+
+        modules.push({
+            name: baseName === 'main'? mainModuleName : baseName,
+            ext: baseName? extname : '',
+            relPath: [...srcPaths, baseName || file].join('/'),
+            absPath: resolvedPath + '/' + (baseName || file),
+            isAsset: baseName? false : true
+        });
+    }
+    return modules;
+}
+
+//import build configurations
 import buildConfig from './build.config.json';
 
-let config = buildConfig;
+//copy config
+let config = buildConfig,
+distConfig = typeof config.distConfig !== 'undefined'? config.distConfig : {},
+libConfig = typeof config.libConfig !== 'undefined'? config.libConfig : {};
 
-if(typeof config.distConfig === 'undefined')
-    config.distConfig = {};
+//resolve uglifyOnly settings and src directory settings
+config.uglifyOnly = typeof config.uglifyOnly !== 'undefined'? config.uglifyOnly : false;
+config.srcDir = typeof config.srcDir !== 'undefined'? config.srcDir : 'src';
+config.copyAssets = typeof config.copyAssets !== 'undefined'? config.copyAssets : false;
 
-if (typeof config.libConfig === 'undefined')
-    config.libConfig = {};
+//resolve and extend external modules
+let externalModules = [];
+if (config.externalModules)
+    externalModules.push(...config.externalModules);
 
-//get modules & external modules
-let modules = getModules('src', config.mainModuleName || 'Module'),
-externalModules = modules.map(module => module.path);
+//resolve and extend file extensions
+let fileExtensions = ['.js'];
+if(config.fileExtensions)
+    fileExtensions.push(...config.fileExtensions);
 
 //resolve the default includes and exclude patterns
 let includes = resolveRegex(config.include || '*'),
 excludes = resolveRegex(config.exclude || null);
 
-export default [
-    ...getExports(
-        'lib',
-        config.libConfig.format || 'cjs',
-        config.libConfig.uglify? true : config.uglify,
+//get modules & extend external modules
+let modules = getModules(
+    [],
+    path.resolve(__dirname, config.srcDir),
+    config.mainModuleName || 'Module',
+    [],
+    fileExtensions
+);
+
+externalModules = [
+    ...externalModules,
+    ...modules.reduce((result, current) => {
+        result.push(current.absPath + current.ext);
+        return result;
+    }, [])
+];
+
+let exports = [];
+
+//if lib config build is not disabled
+if (!libConfig.disabled)
+    getExports(
+        exports,
+        {
+            outDir: path.resolve(__dirname, libConfig.outDir || 'lib'),
+            format: libConfig.format || 'cjs',
+            uglifyOnly: typeof libConfig.uglifyOnly !== 'undefined'? libConfig.uglifyOnly : config.uglifyOnly,
+            uglify: libConfig.uglify? true : config.uglify,
+            copyAssets: typeof libConfig.copyAssets !== 'undefined'? libConfig.copyAssets : config.copyAssets
+        },
         modules,
         externalModules,
-        config.libConfig.include? resolveRegex(config.libConfig.include) : includes,
-        config.libConfig.exclude? resolveRegex(config.libConfig.exclude) : excludes
-    ),
-    ...getExports(
-        'dist',
-        config.distConfig.format || 'iife',
-        config.distConfig.uglify? true : config.uglify,
+        libConfig.include? resolveRegex(libConfig.include) : includes,
+        libConfig.exclude? resolveRegex(libConfig.exclude) : excludes
+    );
+
+if (!distConfig.disabled)
+    getExports(
+        exports,
+        {
+            outDir: path.resolve(__dirname, distConfig.outDir || 'dist'),
+            format: distConfig.format || 'iife',
+            uglifyOnly: typeof distConfig.uglifyOnly !== 'undefined'? distConfig.uglifyOnly : config.uglifyOnly,
+            uglify: distConfig.uglify? true : config.uglify,
+            copyAssets: typeof distConfig.copyAssets !== 'undefined'? distConfig.copyAssets : config.copyAssets
+        },
         modules,
         [],
-        config.distConfig.include? resolveRegex(config.distConfig.include) : includes,
-        config.distConfig.exclude? resolveRegex(config.distConfig.exclude) : excludes
-    )
-];
+        distConfig.include? resolveRegex(distConfig.include) : includes,
+        distConfig.exclude? resolveRegex(distConfig.exclude) : excludes
+    );
+
+export default exports;
