@@ -1,11 +1,12 @@
-# R-Serializer
+# XML-Serializer
 
-[![Build Status](https://travis-ci.org/harrison-ifeanyichukwu/r-serializer.svg?branch=master)](https://travis-ci.org/harrison-ifeanyichukwu/r-serializer)
-[![Coverage Status](https://coveralls.io/repos/github/harrison-ifeanyichukwu/r-serializer/badge.svg?branch=master)](https://coveralls.io/github/harrison-ifeanyichukwu/r-serializer?branch=master)
+[![Build Status](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer.svg?branch=master)](https://travis-ci.org/harrison-ifeanyichukwu/xml-serializer)
+[![Coverage Status](https://coveralls.io/repos/github/harrison-ifeanyichukwu/xml-serializer/badge.svg?branch=master)](https://coveralls.io/github/harrison-ifeanyichukwu/xml-serializer?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![npm version](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fr-serializer.svg)](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fr-serializer)
+[![npm version](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fxml-serializer.svg)](https://badge.fury.io/js/%40harrison-ifeanyichukwu%2Fxml-serializer)
+![npm](https://img.shields.io/npm/dw/%40harrison-ifeanyichukwu%2Fxml-serializer.svg)
 
-R-Serializer is a complete JavaScript implementation of the W3C [xml serialization](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml) specifications. All specifications have been implemented and includes the following [specs](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm):
+XML-Serializer is a complete JavaScript implementation of the W3C [xml serialization](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml) specifications. All specifications have been implemented and includes the following [specs](https://www.w3.org/TR/DOM-Parsing/#dfn-concept-xml-serialization-algorithm):
 
 - [ELEMENT_NODE Serialization]
 
@@ -23,16 +24,16 @@ R-Serializer is a complete JavaScript implementation of the W3C [xml serializati
 
 ## Module Availability
 
-This module is available as an [npm](https://www.npmjs.com/) package and also has a browser build that is located inside the `dist` folder. It can easily be integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
+This module is available as an [npm](https://www.npmjs.com/) scoped package and also has a browser build that is located inside the `dist` folder. It can easily be integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
 
 ## Getting Started
 
-The below command will install `r-serializer` from npm into your project assuming you have the [npm](https://www.npmjs.com/) already installed.
+The below command will install `xml-serializer` from npm into your project assuming you have the [npm](https://www.npmjs.com/) already installed.
 
 **Install as a development dependency**:
 
 ```bash
-npm install --save-dev r-serializer
+npm install --save-dev @harrison-ifeanyichukwu/xml-serializer
 ```
 
 ## Usage Guide

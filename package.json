@@ -1,7 +1,7 @@
 {
-  "name": "r-serializer",
+  "name": "@harrison-ifeanyichukwu/xml-serializer",
   "version": "0.0.0-development",
-  "description": "R-Serializer is a complete JavaScript implementation of the W3C xml serialization specifications",
+  "description": "xml-serializer is a complete JavaScript implementation of the W3C xml serialization specifications",
   "main": "lib/main.js",
   "publishConfig": {
     "access": "public"
@@ -13,14 +13,13 @@
     "report-coverage": "nyc report --reporter=text-lcov | coveralls",
     "prebuild": "rimraf dist && rimraf lib",
     "build": "BABEL_ENV=build rollup --config",
-    "travis-deploy-once": "travis-deploy-once",
     "semantic-release": "semantic-release",
     "validate-doc": "documentation lint src/**/*.js",
     "generate-doc": "rimraf docs/docs && documentation build src/**/*.js -f html -o docs/docs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/harrison-ifeanyichukwu/r-serializer.git"
+    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer.git"
   },
   "keywords": [
     "xml-serialization",
@@ -32,9 +31,9 @@
   "author": "Harrison Ifeanyichukwu <Harrisonifeanyichukwu@gmail.com> (https://harrison-ifeanyichukwu.github.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/harrison-ifeanyichukwu/r-serializer/issues"
+    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer/issues"
   },
-  "homepage": "https://github.com/harrison-ifeanyichukwu/r-serializer#readme",
+  "homepage": "https://github.com/harrison-ifeanyichukwu/xml-serializer#readme",
   "devDependencies": {
     "babel-plugin-external-helpers": "6.22.0",
     "babel-preset-env": "1.7.0",
