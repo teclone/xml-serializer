@@ -6,6 +6,7 @@
         "uglify": true
     },
     "libConfig": {
-        "uglify": false
+        "uglify": false,
+        "sourcemap": false
     }
 }
