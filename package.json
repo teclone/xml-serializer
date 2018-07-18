@@ -1,7 +1,7 @@
 {
   "name": "@harrison-ifeanyichukwu/xml-serializer",
   "version": "0.0.0-development",
-  "description": "xml-serializer is a complete JavaScript implementation of the W3C xml serialization specifications",
+  "description": "A complete JavaScript implementation of the W3C xml serialization specifications.",
   "main": "lib/main.js",
   "publishConfig": {
     "access": "public"
@@ -68,9 +68,5 @@
       "babel-register",
       "./test/setup.js"
     ]
-  },
-  "dependencies": {
-    "npm": "6.2.0",
-    "update": "0.7.4"
   }
 }
