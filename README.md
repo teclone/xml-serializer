@@ -24,7 +24,7 @@ XML-Serializer is a complete JavaScript implementation of the W3C [xml serializa
 
 ## Module Availability
 
-This module is available as an [npm](https://www.npmjs.com/) scoped package and also has a browser build that is located inside the `dist` folder. It can easily be integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
+This module is available as an [npm](https://www.npmjs.com/package/@harrison-ifeanyichukwu/xml-serializer) scoped package and also has a browser build that is located inside the `dist` folder. It can easily be integrated with [JSDOM](https://github.com/jsdom/jsdom) for mockup testing.
 
 ## Getting Started
 
@@ -38,13 +38,21 @@ npm install --save-dev @harrison-ifeanyichukwu/xml-serializer
 
 ## Usage Guide
 
-following the specification, the `XMLSerializer` interface is a constructor and has a `serializeToString(root)` method exposed on the instance. To serialize any xml node, call the `serializeToString(root)` method on a constructed instance, passing in the xml node as below
+Following the specification, the `XMLSerializer` interface is a constructor and has a `serializeToString(root)` method exposed on the instance. To serialize any xml node, call the `serializeToString(root)` method on a constructed instance, passing in the xml node as like shown below:
 
 ```javascript
-import XMLSerializer from 'r-serializer';
+import XMLSerializer from '@harrison-ifeanyichukwu/xml-serializer';
 
 let instance = new XMLSerializer();
 console.log(instance.serializeToString(someXmlNode));
+```
+
+The constructor can take a boolean argument that indicates if whitespace should be preserved in the serialized output. Default value is `true`;
+
+```javascript
+// do not preserve white space
+let instance = new XMLSerializer(false);
+let xmlString = instance.serializeToString(document);
 ```
 
 ### Using with [JSDOM](https://github.com/jsdom/jsdom)
@@ -53,13 +61,11 @@ Currently, JSDOM has not implemented the `XMLSerializer` interface. This can be 
 
 ```javascript
 //assumes jsdom has been installed.
-import XMLSerializer from 'r-serializer';
+import XMLSerializer from '@harrison-ifeanyichukwu/xml-serializer';
 import {JSDOM} from 'jsdom';
 
 let dom = new JSDOM();
-
 dom.window.XMLSerializer = XMLSerializer;
-
 global.window = dom.window;
 
 //start running your tests or do something else.
@@ -67,18 +73,26 @@ global.window = dom.window;
 
 ### Using on the browser
 
-The browser build is available inside the dist folder. It exposes the `XMLSerialzer` construct on the `window` object.
+The browser build is available inside the `dist` folder when you npm install the package. You can also this repo and run the build command locally. It exposes an `XMLSerializer` construct on the `window` object.
 
-## New Features & Improvements
-
-By default, the serializer preserves white space during the serialization process. This can be turned off by passing in false to the constructor at the time of creating an instance.
-
-```javascript
-let instance = new XMLSerializer(false) // preserveWhiteSpace is set to false. it wont
-//preserve white spaces
+```html
+<script type="text/javascript" src="node_modules/@harrison-ifeanyichukwu/xml-serializer/dist/main.min.js"><script>
+<script type="text/javascript">
+    let serializer = new XMLSerializer();
+    // do some serialization stuffs
+</script>
 ```
 
-Another improvement is that it removes all duplicate prefix definition on any xml element as recommended in the specification document unlike what web browsers do. Below is an example of
+## Features & Improvements
+
+By default, the serializer preserves white space during the serialization process. This can be turned off if you want a compact output by passing in `false` to the constructor at the time of creating an instance.
+
+```javascript
+//do not preserve white space
+let instance = new XMLSerializer(false);
+```
+
+Another improvement is that it removes all duplicate xml prefix definition on as recommended in the specification document unlike what web browsers do. Below is an example of
 this:
 
 **Original XML**:
@@ -238,6 +252,26 @@ Notice that all of the duplicated namespaces are removed.
 
 </root>
 ```
+
+## Contributing
+
+We welcome your own contributions, ranging from code refactoring, documentation improvements, new feature implementations, bugs/issues reporting, etc. We recommend you follow the steps below to actively contribute to this project:
+
+1. Decide on what to help us with.
+
+2. Fork this repo to your machine.
+
+3. Implement your ideas, and once stable,
+
+4. Create a pull request, explaining your improvements/features
+
+All future contributors will be included below and immensely appreciated. We look forward to your contributions.
+
+## About Project Maintainers
+
+This project is maintained by [harrison ifeanyichukwu](mailto:harrisonifeanyichukwu@gmail.com), a young, passionate full stack web developer, an [MDN](https://developer.mozilla.org/en-US/profiles/harrison-feanyichukwu) documentator, maintainer of node.js [rollup-all](https://www.npmjs.com/package/rollup-all) project, [R-Server](https://github.com/harrison-ifeanyichukwu/r-server) (a web server project), and other amazing projects.
+
+He is available for hire, ready to work on `PHP` projects, `Node.js` projects, `React` and `Angular` projects and stuffs like that. Looks forward to hearing from you soon!!!
 
 ## Acknowledgments
 
