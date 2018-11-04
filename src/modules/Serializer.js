@@ -4,7 +4,7 @@ const XML_NS = 'http://www.w3.org/XML/1998/namespace',
 XMLNS_NS = 'http://www.w3.org/2000/xmlns/',
 HTML_NS = 'http://www.w3.org/1999/xhtml';
 
-export default class Serializser {
+export default class Serializer {
 
     /**
      * creates an xml serializer
@@ -95,7 +95,7 @@ export default class Serializser {
      *@returns {boolean}
     */
     validateSystemId(systemId) {
-        return this.validateChar(systemId) && !(/[']/.test(systemId) && /["]/.test(systemId));
+        return this.validateChar(systemId);
     }
 
     /**
@@ -628,8 +628,7 @@ export default class Serializser {
         if(Util.isDocTypeNode(node))
             return this.serializeDocumentType(node, requireWellFormed);
 
-        if (Util.isProcessingInstructionNode(node))
-            return this.serializeProcessingInstruction(node, requireWellFormed);
+        return this.serializeProcessingInstruction(node, requireWellFormed);
     }
 
     /**

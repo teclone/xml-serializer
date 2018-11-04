@@ -279,12 +279,16 @@ describe('Serializer', function() {
     });
 
     describe('#serializeProcessingInstruction(node, requireWellFormed)', function() {
-        it(`should serialize a processing instruction node and return the result`, function() {
+        it(`should serialize a processing instruction node and return the result keeping an eye
+            on preserve whitespace state`, function() {
             let doc = (new window.DOMParser()).parseFromString('<root></root>',  'application/xml'),
-            pi = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
+            pi = doc.createProcessingInstruction('xml-stylesheet', '    href="mycss.css" type="text/css"    ');
 
             let serializedPI = serializer.serializeProcessingInstruction(pi, true);
             expect(serializedPI).to.equals('<?xml-stylesheet href="mycss.css" type="text/css"?>');
+
+            let spacedPreservedPI = new Serializer(true).serializeProcessingInstruction(pi, true);
+            expect(spacedPreservedPI).to.equals('<?xml-stylesheet     href="mycss.css" type="text/css"    ?>');
         });
 
         it(`should throw error if the PI target is not valid and the requireWellFormed
@@ -303,12 +307,15 @@ describe('Serializer', function() {
     });
 
     describe('#serializeDocumentType(docType, requireWellFormed)', function() {
-        it(`should serialize a document type and return the result`, function() {
+        it(`should serialize a document type and return the result keeping an eye on the preseve white space rule`, function() {
             let doctype = document.implementation.createDocumentType('svg:svg',
-            '-//W3C//DTD SVG 1.1//EN', 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd');
+            '  -//W3C//DTD SVG 1.1//EN  ', '  http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd  ');
 
             let serializedDocType = serializer.serializeDocumentType(doctype, true);
             expect(serializedDocType).to.equals('<!DOCTYPE svg:svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">');
+
+            let spacePreservedDocType = new Serializer(true).serializeDocumentType(doctype, true);
+            expect(spacePreservedDocType).to.equals('<!DOCTYPE svg:svg PUBLIC "  -//W3C//DTD SVG 1.1//EN  " "  http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd  ">');
         });
 
         it(`should throw error if doc type public id is not valid and the requireWellFormed
@@ -443,9 +450,8 @@ describe('Serializer', function() {
         it(`should throw error if document has no documentElement and requireWellFormed parameter
         is set to true`, function() {
             expect(function() {
-                let doc = (new window.DOMParser()).parseFromString('<root></root>', 'application/xml');
-                doc.documentElement = null;
-                serializer.serializeDocument(doc, true);
+                let doc = (new window.DOMParser()).parseFromString('<?xml version="1.0" encoding="utf-8" ?>', 'application/xml');
+                serializer.serializeDocument(doc, null, null, true);
             }).to.throw(Error);
         });
 
