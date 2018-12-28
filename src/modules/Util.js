@@ -1,6 +1,6 @@
 /**
- * Utility module
- * this module defines a bunch of utility functions that will be relevant to most other modules
+ * defines a bunch of utility functions that will be relevant to most other modules
+ *@module Util
 */
 export default {
     /**

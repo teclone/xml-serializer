@@ -14,8 +14,8 @@
     "prebuild": "rimraf dist && rimraf lib",
     "build": "BABEL_ENV=build rollup --config",
     "semantic-release": "semantic-release",
-    "validate-doc": "documentation lint src/**/*.js",
-    "generate-doc": "rimraf docs/docs && documentation build src/**/*.js -f html -o docs/docs"
+    "validate-doc": "documentation lint src/**",
+    "generate-doc": "rimraf docs && documentation build src/** -f html -o docs"
   },
   "repository": {
     "type": "git",

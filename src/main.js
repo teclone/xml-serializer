@@ -1,5 +1,8 @@
 import Serializer from './modules/Serializer.js';
 
+/**
+ * XML Serializer public module
+*/
 export default class XMLSerializer {
     /**
      *@param {boolean} [preserveWhiteSpace=true] - boolean value indicating if white spaces
@@ -11,6 +14,7 @@ export default class XMLSerializer {
 
     /**
      * return XMLSerializer as modules name
+     *@private
     */
     get [Symbol.toStringTag]() {
         return 'XMLSerializer';

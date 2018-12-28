@@ -4,6 +4,9 @@ const XML_NS = 'http://www.w3.org/XML/1998/namespace',
 XMLNS_NS = 'http://www.w3.org/2000/xmlns/',
 HTML_NS = 'http://www.w3.org/1999/xhtml';
 
+/**
+ * Serializer engine
+*/
 export default class Serializer {
 
     /**
@@ -222,8 +225,7 @@ export default class Serializer {
      * produces the XML serialization of the attributes of an element
      *@param {Element} node - the element node
      *@param {Map} map - namespace prefix map,
-     *@param {boolean} ignoreNSDefAttr - a boolean ignore namespace definition attribute flag,
-     *@param {string} dupPrefixDef - a duplicate prefix definition value
+     *@param {boolean} ignoreNSDefAttr - a boolean ignore namespace definition attribute flag
      *@param {boolean} requireWellFormed - a boolean require well-formed xml flag
      *@returns {string}
      *@see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml-attributes
