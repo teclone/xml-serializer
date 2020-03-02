@@ -43,7 +43,7 @@ Following the specification, the `XMLSerializer` interface is a constructor and 
 ```javascript
 import XMLSerializer from '@teclone/xml-serializer';
 
-let instance = new XMLSerializer();
+const instance = new XMLSerializer();
 console.log(instance.serializeToString(someXmlNode));
 ```
 
@@ -51,21 +51,22 @@ The constructor can take a boolean argument that indicates if whitespace should 
 
 ```javascript
 // do not preserve white space
-let instance = new XMLSerializer(false);
-let xmlString = instance.serializeToString(document);
+const instance = new XMLSerializer(false);
+const xmlString = instance.serializeToString(document);
 ```
 
 ### Using with [JSDOM](https://github.com/jsdom/jsdom)
 
-Currently, JSDOM has not implemented the `XMLSerializer` interface. This can be easily integrated with JSDOM and any other similar mockup environment or for web scrapping and xml feed parsing like below.
+Currently [at the time of creating this], JSDOM has not implemented the `XMLSerializer` interface. This can be easily integrated with JSDOM and any other similar mockup environment or for web scrapping and xml feed parsing like below.
 
 ```javascript
 //assumes jsdom has been installed.
 import XMLSerializer from '@teclone/xml-serializer';
 import { JSDOM } from 'jsdom';
 
-let dom = new JSDOM();
-dom.window.XMLSerializer = XMLSerializer;
+const dom = new JSDOM();
+XMLSerializer.installTo(dom.window);
+
 global.window = dom.window;
 
 //start running your tests or do something else.
@@ -73,16 +74,16 @@ global.window = dom.window;
 
 ### Using on the browser
 
-The browser build is available inside the `dist` folder when you npm install the package. You can also this repo and run the build command locally. It exposes an `XMLSerializer` construct on the `window` object.
+The browser build is available inside the `build/dist` folder when you npm install the package. You can also clone this repo and run the build command locally. It exposes an `XMLSerializer` construct on the `window` object.
 
 ```html
 <script
   type="text/javascript"
-  src="node_modules/@teclone/xml-serializer/dist/main.min.js"
+  src="node_modules/@teclone/xml-serializer/build/dist/main.js"
 >
   <script>
   <script type="text/javascript">
-      let serializer = new XMLSerializer();
+      const serializer = new XMLSerializer();
       // do some serialization stuffs
 </script>
 ```
@@ -93,7 +94,7 @@ By default, the serializer preserves white space during the serialization proces
 
 ```javascript
 //do not preserve white space
-let instance = new XMLSerializer(false);
+const instance = new XMLSerializer(false);
 ```
 
 Another improvement is that it removes all duplicate xml prefix definition on as recommended in the specification document unlike what web browsers do. Below is an example of

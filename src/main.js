@@ -1,6 +1,6 @@
 import Serializer from './modules/Serializer.js';
 
-export class XMLSerializer {
+class XMLSerializer {
   /**
    *@param {boolean} [preserveWhiteSpace=true] - boolean value indicating if white spaces
    * should be preserved as it is in the source
@@ -32,6 +32,8 @@ export class XMLSerializer {
 /**
  * installs the serialize to the given target object
  */
-XMLSerializer.install = target => {
+XMLSerializer.installTo = target => {
   target.XMLSerializer = XMLSerializer;
 };
+
+export default XMLSerializer;
