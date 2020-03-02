@@ -1,8 +1,9 @@
 {
-  "name": "@harrison-ifeanyichukwu/xml-serializer",
+  "name": "@teclone/xml-serializer",
   "version": "0.0.0-development",
   "description": "A complete JavaScript implementation of the W3C xml serialization specifications.",
-  "main": "lib/main.js",
+  "main": "build/main.js",
+  "esm": "build/esm/main.js",
   "publishConfig": {
     "access": "public"
   },
@@ -12,14 +13,14 @@
     "test-watch": "BABEL_ENV=test nyc mocha --recursive -w",
     "report-coverage": "nyc report --reporter=text-lcov | coveralls",
     "prebuild": "rimraf dist && rimraf lib",
-    "build": "BABEL_ENV=build rollup --config",
+    "build": "rollup-all",
     "semantic-release": "semantic-release",
     "validate-doc": "documentation lint src/**/*.js",
     "generate-doc": "rimraf docs/docs && documentation build src/**/*.js -f html -o docs/docs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer.git"
+    "url": "https://github.com/teclone/xml-serializer.git"
   },
   "keywords": [
     "xml-serialization",
@@ -28,13 +29,14 @@
     "w3c-spec",
     "jsdom-xml-serializer"
   ],
-  "author": "Harrison Ifeanyichukwu <Harrisonifeanyichukwu@gmail.com> (https://harrison-ifeanyichukwu.github.io/)",
+  "author": "Harrison Ifeanyichukwu <Harrisonifeanyichukwu@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/harrison-ifeanyichukwu/xml-serializer/issues"
+    "url": "https://github.com/teclone/xml-serializer/issues"
   },
-  "homepage": "https://github.com/harrison-ifeanyichukwu/xml-serializer#readme",
+  "homepage": "https://github.com/teclone/xml-serializer#readme",
   "devDependencies": {
+    "@teclone/rollup-all": "1.10.9",
     "babel-plugin-external-helpers": "6.22.0",
     "babel-preset-env": "1.7.0",
     "babel-register": "6.26.0",
@@ -50,12 +52,8 @@
     "mocha": "5.1.1",
     "nyc": "11.8.0",
     "rimraf": "2.6.2",
-    "rollup": "0.59.1",
-    "rollup-all": "1.1.0",
-    "rollup-plugin-babel": "3.0.4",
-    "rollup-plugin-node-resolve": "3.3.0",
-    "rollup-plugin-uglify": "4.0.0",
-    "semantic-release": "^15.7.1"
+    "semantic-release": "^17.0.4",
+    "semantic-release-cli": "5.2.3"
   },
   "czConfig": {
     "path": "node_modules/cz-conventional-changelog"

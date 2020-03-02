@@ -5,14 +5,14 @@ cache:
 notifications:
   email: false
 node_js:
-  - "9"
-  - "8"
+  - '10'
+  - '12'
 script:
   - npm run test
 jobs:
   include:
     - stage: release
-      node_js: "10"
+      node_js: '12'
       script:
         - npm run test
         - npm run build
