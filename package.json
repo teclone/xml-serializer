@@ -47,7 +47,7 @@
     "documentation": "8.0.0",
     "istanbul": "0.4.5",
     "jsdoc": "3.5.5",
-    "jsdom": "11.10.0",
+    "jsdom": "16.5.0",
     "jshint": "2.9.6",
     "mocha": "5.1.1",
     "nyc": "11.8.0",
